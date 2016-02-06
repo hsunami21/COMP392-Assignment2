@@ -70,13 +70,6 @@ function init() {
     ambientLight = new AmbientLight(0x0c0c0c);
     scene.add(ambientLight);
     console.log("Added an Ambient Light to Scene");
-	
-    // Add a SpotLight to the scene
-    spotLight = new SpotLight(0xffffff);
-    spotLight.position.set(-10, 10, 10);
-    spotLight.castShadow = true;
-    scene.add(spotLight);
-    console.log("Added a SpotLight Light to Scene");
     
     // add controls
     gui = new GUI();
@@ -90,14 +83,24 @@ function init() {
 
     // Sun
     sun = new gameObject(
-        new THREE.SphereGeometry(4, 32, 32),
+        new THREE.SphereGeometry(6, 32, 32),
         new THREE.MeshLambertMaterial({color:0xffff00}),
-        0, 0, 0
+        25, 0, -25
     );
     scene.add(sun);
     
-    var pointLight = new THREE.PointLight( 0xffffff, 1, 100 );
-    sun.add( pointLight );
+    var sunLight = new THREE.PointLight( 0xffffff, 1, 100 );
+    sun.add(sunLight);
+    
+    // Add a SpotLight to the scene
+    spotLight = new SpotLight(0xffffff, 10, 100);
+    spotLight.position.set(15, 10, -15);
+    spotLight.rotateY(Math.PI/2);
+    spotLight.target.position.set(25, 0, -25);
+    console.log(spotLight.target.position);
+    spotLight.castShadow = true;
+    scene.add(spotLight);
+    console.log("Added a SpotLight Light to Scene");
 
     planets = new Array<objects.planet>();
     
@@ -105,22 +108,27 @@ function init() {
     planets.push(new objects.planet(
         new THREE.SphereGeometry(2, 32, 32),
         new THREE.MeshLambertMaterial({color:0xff0000}),
+        0, 0, 0, 0.05, 15, sun.position
+    ));
+    planets.push(new objects.planet(
+        new THREE.SphereGeometry(4, 32, 32),
+        new THREE.MeshLambertMaterial({color:0x00ff00}),
         0, 0, 0, 0.025, 30, sun.position
     ));
     planets.push(new objects.planet(
-        new THREE.SphereGeometry(2, 32, 32),
-        new THREE.MeshLambertMaterial({color:0x00ff00}),
-        0, 0, 0, 0.05, 20, sun.position
-    ));
-    planets.push(new objects.planet(
-        new THREE.SphereGeometry(2, 32, 32),
+        new THREE.SphereGeometry(2.5, 32, 32),
         new THREE.MeshLambertMaterial({color:0x0000ff}),
         0, 0, 0, 0.01, 45, sun.position
     ));
     planets.push(new objects.planet(
         new THREE.SphereGeometry(2, 32, 32),
         new THREE.MeshLambertMaterial({color:0xffffff}),
-        0, 0, 0, 0.005, 55, sun.position
+        0, 0, 0, 0.0075, 60, sun.position
+    ));
+    planets.push(new objects.planet(
+        new THREE.SphereGeometry(3, 32, 32),
+        new THREE.MeshLambertMaterial({color:0xffffff}),
+        0, 0, 0, 0.005, 75, sun.position
     ));
     
     for (var i = 0; i < planets.length; i++) {

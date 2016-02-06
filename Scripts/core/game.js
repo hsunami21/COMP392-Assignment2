@@ -1,22 +1,12 @@
 /// <reference path="_reference.ts"/>
 /*
-    Source name: CubeMan
+    Source name: SolarSystem
     Author: Wendall Hsu 300739743
     Last Modified By: Wendall Hsu
-    Date Last Modified: February 1, 2016
-    Program Description: Creation of a humanoid figure using THREEJS and TypeScript
+    Date Last Modified: February 6, 2016
+    Program Description: Creation of a solar system using THREEJS and TypeScript
     Revision History:
-        Commit #1: Added cube man
-        Commit #2: Added rotation along each axis
-        Commit #3: Added color changing
-        Commit #4: Added textures
-        Commit #5: Added reset scene function
-        Commit #6: Added plane texture and moved spotlight
-        Commit #7: Fixed gitignore file to use on Azure
-        Commit #8: Changed body part object types
-        Commit #9: Added header information to files
-        Commit #10: Fixed reset scene function
-        Commit #11: Fixed GUI scroll values
+        Commit #1: Added sun and rotating planets
 */
 // MAIN GAME FILE
 // THREEJS Aliases
@@ -60,31 +50,14 @@ function init() {
     scene = new Scene();
     setupRenderer(); // setup the default renderer
     setupCamera(); // setup the camera
-    //scene.fog=new THREE.FogExp2( 0xffffff, 0.015 );
-    // scene.fog=new THREE.Fog( 0xffffff, 0.015, 100 );
-    // console.log("Added Fog to scene...");
-    // add an axis helper to the scene
+    // Add an axis helper to the scene
     axes = new AxisHelper(20);
     scene.add(axes);
     console.log("Added Axis Helper to scene...");
-    //Add a Plane to the Scene
-    // plane = new gameObject(
-    //     new PlaneGeometry(60, 40, 1, 1),
-    //     new LambertMaterial({ map:  THREE.ImageUtils.loadTexture('../../Assets/Images/grass.jpg')}),
-    //     0, 0, 0);
-    // plane.rotation.x = -0.5 * Math.PI;
-    // scene.add(plane);
-    // console.log("Added Plane Primitive to scene...");
     // Add an AmbientLight to the scene
     ambientLight = new AmbientLight(0x0c0c0c);
     scene.add(ambientLight);
     console.log("Added an Ambient Light to Scene");
-    // Add a SpotLight to the scene
-    spotLight = new SpotLight(0xffffff);
-    spotLight.position.set(-10, 10, 10);
-    spotLight.castShadow = true;
-    scene.add(spotLight);
-    console.log("Added a SpotLight Light to Scene");
     // add controls
     gui = new GUI();
     control = new Control(0.01, 0.01, 0.01, 60, 40);
@@ -94,16 +67,26 @@ function init() {
     addStatsObject();
     console.log("Added Stats to scene...");
     // Sun
-    sun = new gameObject(new THREE.SphereGeometry(4, 32, 32), new THREE.MeshLambertMaterial({ color: 0xffff00 }), 0, 0, 0);
+    sun = new gameObject(new THREE.SphereGeometry(6, 32, 32), new THREE.MeshLambertMaterial({ color: 0xffff00 }), 25, 0, -25);
     scene.add(sun);
-    var pointLight = new THREE.PointLight(0xffffff, 1, 100);
-    sun.add(pointLight);
+    var sunLight = new THREE.PointLight(0xffffff, 1, 100);
+    sun.add(sunLight);
+    // Add a SpotLight to the scene
+    spotLight = new SpotLight(0xffffff, 10, 100);
+    spotLight.position.set(15, 10, -15);
+    spotLight.rotateY(Math.PI / 2);
+    spotLight.target.position.set(25, 0, -25);
+    console.log(spotLight.target.position);
+    spotLight.castShadow = true;
+    scene.add(spotLight);
+    console.log("Added a SpotLight Light to Scene");
     planets = new Array();
     // Planets
-    planets.push(new objects.planet(new THREE.SphereGeometry(2, 32, 32), new THREE.MeshLambertMaterial({ color: 0xff0000 }), 0, 0, 0, 0.025, 30, sun.position));
-    planets.push(new objects.planet(new THREE.SphereGeometry(2, 32, 32), new THREE.MeshLambertMaterial({ color: 0x00ff00 }), 0, 0, 0, 0.05, 15, sun.position));
-    planets.push(new objects.planet(new THREE.SphereGeometry(2, 32, 32), new THREE.MeshLambertMaterial({ color: 0x0000ff }), 0, 0, 0, 0.01, 45, sun.position));
-    planets.push(new objects.planet(new THREE.SphereGeometry(2, 32, 32), new THREE.MeshLambertMaterial({ color: 0xffffff }), 0, 0, 0, 0.005, 55, sun.position));
+    planets.push(new objects.planet(new THREE.SphereGeometry(2, 32, 32), new THREE.MeshLambertMaterial({ color: 0xff0000 }), 0, 0, 0, 0.05, 15, sun.position));
+    planets.push(new objects.planet(new THREE.SphereGeometry(4, 32, 32), new THREE.MeshLambertMaterial({ color: 0x00ff00 }), 0, 0, 0, 0.025, 30, sun.position));
+    planets.push(new objects.planet(new THREE.SphereGeometry(2.5, 32, 32), new THREE.MeshLambertMaterial({ color: 0x0000ff }), 0, 0, 0, 0.01, 45, sun.position));
+    planets.push(new objects.planet(new THREE.SphereGeometry(2, 32, 32), new THREE.MeshLambertMaterial({ color: 0xffffff }), 0, 0, 0, 0.0075, 60, sun.position));
+    planets.push(new objects.planet(new THREE.SphereGeometry(3, 32, 32), new THREE.MeshLambertMaterial({ color: 0xffffff }), 0, 0, 0, 0.005, 75, sun.position));
     for (var i = 0; i < planets.length; i++) {
         scene.add(planets[i]);
         console.log("Added planet " + i);
@@ -130,14 +113,6 @@ function addStatsObject() {
 // Setup main game loop
 function gameLoop() {
     stats.update();
-    // // rotate the cubes around its axes
-    // scene.traverse(function(threeObject:THREE.Mesh) {
-    //     if (threeObject == sun) {
-    //         // threeObject.rotation.x += control.rotationSpeedX;
-    //         threeObject.rotation.y += 0.005;
-    //         // threeObject.rotation.z += control.rotationSpeedZ;
-    //     }
-    // });
     for (var i = 0; i < planets.length; i++) {
         planets[i].update();
     }
