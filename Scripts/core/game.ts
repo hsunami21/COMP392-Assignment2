@@ -8,6 +8,9 @@
     Program Description: Creation of a solar system using THREEJS and TypeScript
     Revision History:
         Commit #1: Added sun and rotating planets
+        Commit #2: Added 5th planet and moved objects to fit on screen
+        Commit #3: Reset sun and planet positions and added zoom control
+
 */
 
 // MAIN GAME FILE
@@ -85,12 +88,12 @@ function init() {
     // Sun
     sun = new gameObject(
         new THREE.SphereGeometry(6, 32, 32),
-        new THREE.MeshLambertMaterial({color:0xffff00}),
+        new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/sun.jpg')}),
         0, 0, 0
     );
     scene.add(sun);
     
-    var sunLight = new THREE.PointLight( 0xffffff, 1, 100 );
+    var sunLight = new THREE.PointLight( 0xffffff, 2, 100 );
     sun.add(sunLight);
     
     // Add a SpotLight to the scene
@@ -107,32 +110,32 @@ function init() {
     // Planets
     planets.push(new objects.planet(
         new THREE.SphereGeometry(2, 32, 32),
-        new THREE.MeshLambertMaterial({color:0xff0000}),
+        new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/p1.png')}),
         0, 0, 0, -0.05, 15, sun.position
     ));
     planets.push(new objects.planet(
         new THREE.SphereGeometry(4, 32, 32),
-        new THREE.MeshLambertMaterial({color:0x00ff00}),
+        new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/p2.jpeg')}),
         0, 0, 0, 0.025, 30, sun.position
     ));
     planets.push(new objects.planet(
         new THREE.SphereGeometry(2, 32, 32),
-        new THREE.MeshLambertMaterial({color:0x0000ff}),
+        new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/p3.jpeg')}),
         0, 0, 0, 0.01, 45, sun.position
     ));
     planets.push(new objects.planet(
         new THREE.SphereGeometry(3, 32, 32),
-        new THREE.MeshLambertMaterial({color:0xffffff}),
+        new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/p4.jpg')}),
         0, 0, 0, -0.0075, 60, sun.position
     ));
     planets.push(new objects.planet(
         new THREE.SphereGeometry(2.5, 32, 32),
-        new THREE.MeshLambertMaterial({color:0xffffff}),
+        new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/p5.jpg')}),
         0, 0, 0, 0.005, 70, sun.position
     ));
     planets.push(new objects.planet(
         new THREE.SphereGeometry(1, 32, 32),
-        new THREE.MeshLambertMaterial({color:0xffffff}),
+        new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/moon.jpeg')}),
         0, 0, 0, -0.025, 5, planets[1].position
     ));
     
@@ -172,10 +175,15 @@ function addStatsObject() {
 function gameLoop(): void {
     stats.update();
     
+    sun.rotation.x += 0.01;
+    sun.rotation.y += 0.01;
+    
+    // Update all planet positions
     for (var i = 0; i < planets.length; i++) {
         planets[i].update();
     }
     
+    // Follow planet with moon when zoomed in
     if (zoom) {
         control.zoomIn();
     }
