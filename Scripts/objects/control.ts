@@ -25,6 +25,19 @@ module objects {
 
         //PUBLIC METHODS ++++++++++++++++++++++++++++++++++++++++
         
+        // Change camera view
+        public zoomIn(): void {
+            camera.position.set(planets[1].position.x + 30, planets[1].position.y + 30, planets[1].position.z + 30);
+            camera.lookAt(planets[1].position);
+            zoom = true;
+        }
+        
+        public zoomOut(): void {
+            camera.position.set(-100, 100, 100);
+            camera.lookAt(scene.position); 
+            zoom = false;   
+        }
+        
         // show scene objects
         public outputObjects(): void {
             console.log(scene.children);
