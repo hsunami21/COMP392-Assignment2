@@ -27,7 +27,7 @@ module objects {
         
         // Change camera view
         public zoomIn(): void {
-            camera.position.set(planets[1].position.x + 30, planets[1].position.y + 30, planets[1].position.z + 30);
+            camera.position.set(planets[1].position.x - 30, planets[1].position.y + 30, planets[1].position.z + 30);
             camera.lookAt(planets[1].position);
             zoom = true;
         }
