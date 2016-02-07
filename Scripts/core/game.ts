@@ -10,7 +10,7 @@
         Commit #1: Added sun and rotating planets
         Commit #2: Added 5th planet and moved objects to fit on screen
         Commit #3: Reset sun and planet positions and added zoom control
-
+        Commit #4: Added a ring structure, additional moons, and zoom to any planet functionality
 */
 
 // MAIN GAME FILE
@@ -54,7 +54,9 @@ var step: number = 0;
 
 var sun: gameObject;
 var planets: objects.planet[];
-var zoom: boolean;
+var moons: objects.planet[];
+var ringMesh: Mesh;
+var zoom: boolean[];
 
 function init() {
     // Instantiate a new Scene object
@@ -106,6 +108,8 @@ function init() {
     console.log("Added a SpotLight Light to Scene");
 
     planets = new Array<objects.planet>();
+    moons = new Array<objects.planet>();
+    zoom = new Array<boolean>();
     
     // Planets
     planets.push(new objects.planet(
@@ -131,18 +135,44 @@ function init() {
     planets.push(new objects.planet(
         new THREE.SphereGeometry(2.5, 32, 32),
         new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/p5.jpg')}),
-        0, 0, 0, 0.005, 70, sun.position
+        0, 0, 0, 0.005, 75, sun.position
     ));
-    planets.push(new objects.planet(
+    moons.push(new objects.planet(
         new THREE.SphereGeometry(1, 32, 32),
-        new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/moon.jpeg')}),
+        new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/m1.jpeg')}),
         0, 0, 0, -0.025, 5, planets[1].position
     ));
+    moons.push(new objects.planet(
+        new THREE.SphereGeometry(1, 32, 32),
+        new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/m2.jpeg')}),
+        0, 0, 0, 0.025, 8, planets[4].position
+    ));
+    moons.push(new objects.planet(
+        new THREE.SphereGeometry(1, 32, 32),
+        new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/m3.jpeg')}),
+        0, 0, 0, -0.025, 4, planets[4].position
+    ));
+    
+    
+    ringMesh = new THREE.Mesh(
+        new THREE.RingGeometry(2.5, 4, 32), 
+        new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/ring.jpg'), side: THREE.DoubleSide}));
+    
+    planets[2].add(ringMesh);
     
     for (var i = 0; i < planets.length; i++) {
         scene.add(planets[i]);
         console.log("Added planet " + i);
-    }
+    };
+    
+    for (var i = 0; i < moons.length; i++) {
+        scene.add(moons[i]);
+        console.log("Added moon " + i);
+    };
+    
+    for (var i = 0; i < planets.length; i++) {
+        zoom[i] = false;
+    };
     
     document.body.appendChild(renderer.domElement);
     gameLoop(); // render the scene	
@@ -158,7 +188,11 @@ function onResize(): void {
 
 
 function addControl(controlObject: Control): void {
-    gui.add(controlObject, "zoomIn");
+    gui.add(controlObject, "zoomPlanet1");
+    gui.add(controlObject, "zoomPlanet2");
+    gui.add(controlObject, "zoomPlanet3");
+    gui.add(controlObject, "zoomPlanet4");
+    gui.add(controlObject, "zoomPlanet5");
     gui.add(controlObject, "zoomOut");
 }
 
@@ -178,15 +212,22 @@ function gameLoop(): void {
     sun.rotation.x += 0.01;
     sun.rotation.y += 0.01;
     
-    // Update all planet positions
+    // Update all planet and moon positions
     for (var i = 0; i < planets.length; i++) {
         planets[i].update();
     }
     
-    // Follow planet with moon when zoomed in
-    if (zoom) {
-        control.zoomIn();
+    for (var i = 0; i < moons.length; i++) {
+        moons[i].update();
     }
+    
+    // Follow planet with moon when zoomed in
+    for (var i = 0; i < zoom.length; i++) {
+         if (zoom[i]) {
+            control.zoomIn(i);
+        }
+    }
+   
     
     // render using requestAnimationFrame
     requestAnimationFrame(gameLoop);
@@ -207,10 +248,9 @@ function setupRenderer(): void {
 // Setup main camera for the scene
 function setupCamera(): void {
     camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.x = -100;
-    camera.position.y = 100;
-    camera.position.z = 100;
+    camera.position.x = -110;
+    camera.position.y = 110;
+    camera.position.z = 110;
     camera.lookAt(scene.position);
-    zoom = false;
     console.log("Finished setting up Camera...");
 }

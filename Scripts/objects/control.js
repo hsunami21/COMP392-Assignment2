@@ -14,15 +14,51 @@ var objects;
         }
         //PUBLIC METHODS ++++++++++++++++++++++++++++++++++++++++
         // Change camera view
-        Control.prototype.zoomIn = function () {
-            camera.position.set(planets[1].position.x - 30, planets[1].position.y + 30, planets[1].position.z + 30);
-            camera.lookAt(planets[1].position);
-            zoom = true;
+        Control.prototype.zoomPlanet1 = function () {
+            for (var i = 0; i < zoom.length; i++) {
+                zoom[i] = false;
+            }
+            this.zoomIn(0);
+            zoom[0] = true;
+        };
+        Control.prototype.zoomPlanet2 = function () {
+            for (var i = 0; i < zoom.length; i++) {
+                zoom[i] = false;
+            }
+            this.zoomIn(1);
+            zoom[1] = true;
+        };
+        Control.prototype.zoomPlanet3 = function () {
+            for (var i = 0; i < zoom.length; i++) {
+                zoom[i] = false;
+            }
+            this.zoomIn(2);
+            zoom[2] = true;
+        };
+        Control.prototype.zoomPlanet4 = function () {
+            for (var i = 0; i < zoom.length; i++) {
+                zoom[i] = false;
+            }
+            this.zoomIn(3);
+            zoom[3] = true;
+        };
+        Control.prototype.zoomPlanet5 = function () {
+            for (var i = 0; i < zoom.length; i++) {
+                zoom[i] = false;
+            }
+            this.zoomIn(4);
+            zoom[4] = true;
+        };
+        Control.prototype.zoomIn = function (num) {
+            camera.position.set(planets[num].position.x - 25, planets[num].position.y + 25, planets[num].position.z + 25);
+            camera.lookAt(planets[num].position);
         };
         Control.prototype.zoomOut = function () {
-            camera.position.set(-100, 100, 100);
+            camera.position.set(-110, 110, 110);
             camera.lookAt(scene.position);
-            zoom = false;
+            for (var i = 0; i < zoom.length; i++) {
+                zoom[i] = false;
+            }
         };
         // show scene objects
         Control.prototype.outputObjects = function () {

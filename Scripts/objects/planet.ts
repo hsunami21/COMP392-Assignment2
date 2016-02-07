@@ -24,7 +24,8 @@ module objects {
         public update(): void {
             this.rotation.x += 0.025;
             this.rotation.y += 0.025;
-            
+            // this.rotation.z += 0.025;
+                        
             this._rotation += this._rotationSpeed;
             var xPos = Math.cos(this._rotation);
             var zPos = Math.sin(this._rotation);
