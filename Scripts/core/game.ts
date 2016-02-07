@@ -11,6 +11,7 @@
         Commit #2: Added 5th planet and moved objects to fit on screen
         Commit #3: Reset sun and planet positions and added zoom control
         Commit #4: Added a ring structure, additional moons, and zoom to any planet functionality
+        Commit #5: Modified moon orbit speeds
 */
 
 // MAIN GAME FILE
@@ -140,7 +141,7 @@ function init() {
     moons.push(new objects.planet(
         new THREE.SphereGeometry(1, 32, 32),
         new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/m1.jpeg')}),
-        0, 0, 0, -0.025, 5, planets[1].position
+        0, 0, 0, -0.01, 5, planets[1].position
     ));
     moons.push(new objects.planet(
         new THREE.SphereGeometry(1, 32, 32),
@@ -150,7 +151,7 @@ function init() {
     moons.push(new objects.planet(
         new THREE.SphereGeometry(1, 32, 32),
         new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/m3.jpeg')}),
-        0, 0, 0, -0.025, 4, planets[4].position
+        0, 0, 0, -0.0075, 4, planets[4].position
     ));
     
     
