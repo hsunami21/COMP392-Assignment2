@@ -141,17 +141,17 @@ function init() {
     moons.push(new objects.planet(
         new THREE.SphereGeometry(1, 32, 32),
         new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/m1.jpeg')}),
-        0, 0, 0, -0.01, 5, planets[1].position
+        0, 0, 0, -0.025, 5, planets[1].position
     ));
     moons.push(new objects.planet(
         new THREE.SphereGeometry(1, 32, 32),
         new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/m2.jpeg')}),
-        0, 0, 0, 0.025, 8, planets[4].position
+        0, 0, 0, 0.025, 4, planets[4].position
     ));
     moons.push(new objects.planet(
         new THREE.SphereGeometry(1, 32, 32),
         new THREE.MeshLambertMaterial({map:  THREE.ImageUtils.loadTexture('../../Assets/Images/m3.jpeg')}),
-        0, 0, 0, -0.0075, 4, planets[4].position
+        0, 0, 0, -0.01, 8, planets[4].position
     ));
     
     

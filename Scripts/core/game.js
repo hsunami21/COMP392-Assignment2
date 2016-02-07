@@ -10,6 +10,7 @@
         Commit #2: Added 5th planet and moved objects to fit on screen
         Commit #3: Reset sun and planet positions and added zoom control
         Commit #4: Added a ring structure, additional moons, and zoom to any planet functionality
+        Commit #5: Modified moon orbit speeds
 */
 // MAIN GAME FILE
 // THREEJS Aliases
@@ -94,9 +95,9 @@ function init() {
     planets.push(new objects.planet(new THREE.SphereGeometry(2, 32, 32), new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('../../Assets/Images/p3.jpeg') }), 0, 0, 0, 0.01, 45, sun.position));
     planets.push(new objects.planet(new THREE.SphereGeometry(3, 32, 32), new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('../../Assets/Images/p4.jpg') }), 0, 0, 0, -0.0075, 60, sun.position));
     planets.push(new objects.planet(new THREE.SphereGeometry(2.5, 32, 32), new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('../../Assets/Images/p5.jpg') }), 0, 0, 0, 0.005, 75, sun.position));
-    moons.push(new objects.planet(new THREE.SphereGeometry(1, 32, 32), new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('../../Assets/Images/m1.jpeg') }), 0, 0, 0, -0.01, 5, planets[1].position));
-    moons.push(new objects.planet(new THREE.SphereGeometry(1, 32, 32), new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('../../Assets/Images/m2.jpeg') }), 0, 0, 0, 0.025, 8, planets[4].position));
-    moons.push(new objects.planet(new THREE.SphereGeometry(1, 32, 32), new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('../../Assets/Images/m3.jpeg') }), 0, 0, 0, -0.0075, 4, planets[4].position));
+    moons.push(new objects.planet(new THREE.SphereGeometry(1, 32, 32), new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('../../Assets/Images/m1.jpeg') }), 0, 0, 0, -0.025, 5, planets[1].position));
+    moons.push(new objects.planet(new THREE.SphereGeometry(1, 32, 32), new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('../../Assets/Images/m2.jpeg') }), 0, 0, 0, 0.025, 4, planets[4].position));
+    moons.push(new objects.planet(new THREE.SphereGeometry(1, 32, 32), new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('../../Assets/Images/m3.jpeg') }), 0, 0, 0, -0.01, 8, planets[4].position));
     ringMesh = new THREE.Mesh(new THREE.RingGeometry(2.5, 4, 32), new THREE.MeshLambertMaterial({ map: THREE.ImageUtils.loadTexture('../../Assets/Images/ring.jpg'), side: THREE.DoubleSide }));
     planets[2].add(ringMesh);
     for (var i = 0; i < planets.length; i++) {
